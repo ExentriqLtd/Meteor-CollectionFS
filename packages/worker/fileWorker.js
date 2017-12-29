@@ -168,10 +168,11 @@ function saveCopy(fsFile, storeName, options) {
   }
 
   FS.debug && console.log('saving to store ' + storeName);
+  if (!storage.allowCopy || storage.allowCopy(fsFile)) {
+    var writeStream = storage.adapter.createWriteStream(fsFile);
+    var readStream = FS.TempStore.createReadStream(fsFile);
 
-  var writeStream = storage.adapter.createWriteStream(fsFile);
-  var readStream = FS.TempStore.createReadStream(fsFile);
-
-  // Pipe the temp data into the storage adapter
-  readStream.pipe(writeStream);
+    // Pipe the temp data into the storage adapter
+    readStream.pipe(writeStream);
+  }
 }
