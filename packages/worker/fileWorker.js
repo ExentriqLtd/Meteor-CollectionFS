@@ -171,7 +171,7 @@ function saveCopy(fsFile, storeName, options) {
   if (!storage.allowCopy || storage.allowCopy(fsFile)) {
     var writeStream = storage.adapter.createWriteStream(fsFile);
     var readStream = FS.TempStore.createReadStream(fsFile);
-
+    readStream.on('error', console.error);
     // Pipe the temp data into the storage adapter
     readStream.pipe(writeStream);
   }
